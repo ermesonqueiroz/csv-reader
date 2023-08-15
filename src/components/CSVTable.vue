@@ -1,5 +1,9 @@
 <script setup>
-const props = defineProps(['content']);
+import { useDataStore } from "@/stores/DataStore";
+
+const dataStore = useDataStore();
+const header = Object.keys(dataStore.data[0]);
+const rows = Object.values(dataStore.data);
 </script>
 
 <template>
@@ -8,8 +12,8 @@ const props = defineProps(['content']);
             <thead class="text-xs uppercase bg-zinc-700 text-gray-400 whitespace-nowrap">
                 <tr>
                     <th
+                        v-for="item in header"
                         :key="item"
-                        v-for="item in Object.keys(props.content[0])"
                         class="px-6 py-3"
                     >
                         {{ item }}
@@ -18,13 +22,13 @@ const props = defineProps(['content']);
             </thead>
             <tbody>
                 <tr
+                    v-for="row in rows"
                     :key="JSON.stringify(row)"
-                    v-for="row in Object.values(props.content)"
-                    class="border-b bg-neutral-800 border-gray-700"
+                    class="border-t bg-neutral-800 border-gray-700"
                 >
                     <td
-                        :key="item"
                         v-for="item in row"
+                        :key="item"
                         class="px-6 py-4"
                     >
                         {{ item }}

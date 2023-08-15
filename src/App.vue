@@ -1,19 +1,22 @@
 <script setup>
-import { ref } from "vue";
-import { parseCSV } from "./common/parse-csv";
 import CSVTable from "@/components/CSVTable.vue";
+import { useDataStore } from "@/stores/DataStore";
+import { parseCSV } from "@/common/parse-csv";
 
-const csv = ref('');
+const dataStore = useDataStore();
 
 async function onFileChange(e) {
   const [file] = e.target.files;
+  const fileText = await file.text();
 
-  csv.value = (await file.text()).trim();
+  dataStore.setData(
+      parseCSV(fileText.trim())
+  );
 }
 </script>
 
 <template>
-  <CSVTable v-if="csv.length > 0" :content="parseCSV(csv)" />
+  <CSVTable v-if="!!dataStore?.data" />
   <input
       v-else
       type="file"
